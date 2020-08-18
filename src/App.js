@@ -9,10 +9,17 @@ class Child extends React.Component{
     }
   }
 
-  componentWillReceiveProps(nextProps) {
-    console.log('nextProps',nextProps)
-    console.log('this.props',this.props)
-    this.setState({data:nextProps.data})
+  // componentWillReceiveProps(nextProps) {
+  //   console.log('nextProps',nextProps)
+  //   console.log('this.props',this.props)
+  //   this.setState({data:nextProps.data})
+  // }
+
+  static getDerivedStateFromProps(props){
+    console.log('----',props);
+    return {
+      data:props.data
+    }
   }
   
   render(){
@@ -27,12 +34,26 @@ class Child extends React.Component{
   }
 }
 
+const MemoBtn= React.memo(function Button(props){
+  return (
+    <button {...props} style={{
+      margin:'10px 20px',
+      backgroundColor:'maroon',
+      padding:'10px 20px'
+    }}></button>
+  )
+})
+
 class App extends React.Component {
     constructor(props){
       super(props)
       this.state={
         count:0
       }
+    }
+
+    clickHandler=()=>{
+      this.setState({count:this.state.count+1})
     }
 
     render(){
@@ -43,7 +64,8 @@ class App extends React.Component {
           backgroundColor:'yellow'
         }}>{this.state.count}</div>
           <Child data={this.state.count}/>
-          <button onClick={()=>this.setState({count:this.state.count+1})}>+ Add</button>
+         <MemoBtn onClick={this.clickHandler}>+ Add</MemoBtn>
+         <MemoBtn onClick={this.clickHandler}>+ Add</MemoBtn>
         </>
       )
     }
