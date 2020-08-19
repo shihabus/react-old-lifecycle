@@ -15,12 +15,19 @@ class Child extends React.Component{
   //   this.setState({data:nextProps.data})
   // }
 
-  static getDerivedStateFromProps(props){
-    console.log('----',props);
+  static getDerivedStateFromProps(props,state){
+    console.log('----props',props);
+    console.log('----state',state);
     return {
       data:props.data
     }
   }
+
+  // UNSAFE_componentWillUpdate(nextProps, nextState) {
+  //   console.log('nextProps---',nextProps);
+  //   console.log('nextState------',nextState);
+  // }
+  
   
   render(){
     return(
