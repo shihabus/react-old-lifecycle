@@ -1,81 +1,56 @@
-import React from 'react';
-import './App.css';
+import React, { Component } from "react";
+import Button from "./Button";
+import Display from "./Display";
 
-class Child extends React.Component{
-  constructor(props){
-    super(props)
-    this.state={
-      data:props.data
-    }
+export default class App extends Component {
+  constructor(props) {
+    super(props);
+    console.log("App constructor");
+    this.state = {
+      count: 0,
+    };
   }
 
-  // componentWillReceiveProps(nextProps) {
-  //   console.log('nextProps',nextProps)
-  //   console.log('this.props',this.props)
-  //   this.setState({data:nextProps.data})
-  // }
-
-  static getDerivedStateFromProps(props,state){
-    console.log('----props',props);
-    console.log('----state',state);
-    return {
-      data:props.data
-    }
+  componentWillMount() {
+    console.log("App componentWillMount");
   }
 
-  // UNSAFE_componentWillUpdate(nextProps, nextState) {
-  //   console.log('nextProps---',nextProps);
-  //   console.log('nextState------',nextState);
-  // }
-  
-  
-  render(){
-    return(
-      <div style={{
-        padding:'20px',
-        backgroundColor:'red'
-      }}>
-        {this.state.data}
+  componentDidMount() {
+    console.log("App componentDidMount");
+  }
+
+  componentWillReceiveProps(nextProps) {
+    console.log("App componentWillReceiveProps nextProps", nextProps);
+  }
+
+  componentWillUpdate(nextProps, nextState) {
+    console.log("App componentWillUpdate nextProps", nextProps);
+    console.log("App componentWillUpdate nextState", nextState);
+  }
+
+  shouldComponentUpdate() {
+    console.log("App shouldComponentUpdate");
+    return true;
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    console.log("App componentDidUpdate prevProps", prevProps);
+    console.log("App componentDidUpdate prevState", prevState);
+  }
+
+  onClickHandler = (e) => {
+    e.preventDefault();
+    this.setState({ count: this.state.count + 1 });
+  };
+
+  render() {
+    console.log("App render");
+    return (
+      <div>
+        <Display text={this.state.count} />
+        <Button onClick={this.onClickHandler}>Increment</Button>
+        <p>Current state: {this.state.count}</p>
       </div>
-    )
+    );
   }
 }
-
-const MemoBtn= React.memo(function Button(props){
-  return (
-    <button {...props} style={{
-      margin:'10px 20px',
-      backgroundColor:'maroon',
-      padding:'10px 20px'
-    }}></button>
-  )
-})
-
-class App extends React.Component {
-    constructor(props){
-      super(props)
-      this.state={
-        count:0
-      }
-    }
-
-    clickHandler=()=>{
-      this.setState({count:this.state.count+1})
-    }
-
-    render(){
-      return(
-        <>
-          <div style={{
-          padding:'20px',
-          backgroundColor:'yellow'
-        }}>{this.state.count}</div>
-          <Child data={this.state.count}/>
-         <MemoBtn onClick={this.clickHandler}>+ Add</MemoBtn>
-         <MemoBtn onClick={this.clickHandler}>+ Add</MemoBtn>
-        </>
-      )
-    }
-}
-
-export default App;
