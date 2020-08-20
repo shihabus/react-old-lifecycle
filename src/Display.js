@@ -28,7 +28,6 @@ class P extends Component {
   }
 
   render() {
-    console.log("P render");
     return <p>{this.props.value}</p>;
   }
 }
@@ -37,19 +36,13 @@ export default class Display extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isLoading: true,
-      data: null,
+      data: 0,
     };
     console.log("Display constructor");
   }
 
   async componentWillMount() {
     console.log("Display componentWillMount");
-    this.setState({ isLoading: true });
-    console.log("Display data fetch started ++++++++++++");
-    const { data } = await axios.get("https://randomuser.me/api/");
-    console.log("Display data fetched --------");
-    this.setState({ isLoading: false, data: data.results[0].cell });
   }
 
   async componentDidMount() {
@@ -58,32 +51,42 @@ export default class Display extends Component {
 
   componentWillReceiveProps(nextProps) {
     console.log("Display componentWillReceiveProps nextProps", nextProps);
+    console.log("Display componentWillReceiveProps this.props", this.props);
+    console.log("I doubled prop", this.props);
+    this.setState(() => ({ data: nextProps.text * 2 }));
   }
 
   componentWillUpdate(nextProps, nextState) {
     console.log("Display componentWillUpdate nextProps", nextProps);
     console.log("Display componentWillUpdate nextState", nextState);
+    console.log("Display componentWillUpdate this.props", this.props);
+    console.log("Display componentWillUpdate this.state", this.state);
   }
 
   shouldComponentUpdate() {
-    console.log("Display shouldComponentUpdate");
+    //  console.log("Display shouldComponentUpdate");
     return true;
   }
 
   componentDidUpdate(prevProps, prevState) {
     console.log("Display componentDidUpdate prevProps", prevProps);
+    console.log("Display componentDidUpdate this.props", this.props);
     console.log("Display componentDidUpdate prevState", prevState);
+    console.log("Display componentDidUpdate this.state", this.state);
+    console.log("I added 2 to prop", this.props);
+    if (this.props.text !== prevProps.text) {
+      this.setState((prevState, props) => ({ data: props.text + 2 }));
+    }
   }
 
   render() {
     console.log("Display render");
     const { text } = this.props;
-    const { isLoading, data } = this.state;
+    const { data } = this.state;
     return (
       <div>
-        <P value={text} />
-        {isLoading && <p>Loading.......</p>}
-        {data && <p>{data}</p>}
+        <p>Display prop: {text}</p>
+        <p>Display state: {data}</p>
       </div>
     );
   }
