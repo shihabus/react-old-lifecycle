@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-
+import axios from "axios";
 class P extends Component {
   constructor(props) {
     super(props);
@@ -36,13 +36,23 @@ class P extends Component {
 export default class Display extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      isLoading: true,
+      data: null,
+    };
     console.log("Display constructor");
   }
-  componentWillMount() {
+
+  async componentWillMount() {
     console.log("Display componentWillMount");
+    this.setState({ isLoading: true });
+    console.log("Display data fetch started ++++++++++++");
+    const { data } = await axios.get("https://randomuser.me/api/");
+    console.log("Display data fetched --------");
+    this.setState({ isLoading: false, data: data.results[0].cell });
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     console.log("Display componentDidMount");
   }
 
@@ -68,9 +78,12 @@ export default class Display extends Component {
   render() {
     console.log("Display render");
     const { text } = this.props;
+    const { isLoading, data } = this.state;
     return (
       <div>
         <P value={text} />
+        {isLoading && <p>Loading.......</p>}
+        {data && <p>{data}</p>}
       </div>
     );
   }

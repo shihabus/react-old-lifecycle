@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import Button from "./Button";
 import Display from "./Display";
+import axios from "axios";
 
 export default class App extends Component {
   constructor(props) {
@@ -8,15 +9,23 @@ export default class App extends Component {
     console.log("App constructor");
     this.state = {
       count: 0,
+      isLoading: true,
+      data: null,
     };
   }
 
-  componentWillMount() {
+  async componentWillMount() {
     console.log("App componentWillMount");
+    this.setState({ isLoading: true });
+    console.log("App data fetch started ++++++++++++");
+    const { data } = await axios.get("https://randomuser.me/api/");
+    console.log("App data fetched --------");
+    this.setState({ isLoading: false, data: data.results[0].cell });
   }
 
   componentDidMount() {
     console.log("App componentDidMount");
+    console.log("-------------+++-------------------");
   }
 
   componentWillReceiveProps(nextProps) {
@@ -36,6 +45,7 @@ export default class App extends Component {
   componentDidUpdate(prevProps, prevState) {
     console.log("App componentDidUpdate prevProps", prevProps);
     console.log("App componentDidUpdate prevState", prevState);
+    console.log("-------------+++-------------------");
   }
 
   onClickHandler = (e) => {
@@ -45,11 +55,14 @@ export default class App extends Component {
 
   render() {
     console.log("App render");
+    const { isLoading, data, count } = this.state;
     return (
       <div>
-        <Display text={this.state.count} />
+        <Display text={count} />
         <Button onClick={this.onClickHandler}>Increment</Button>
-        <p>Current state: {this.state.count}</p>
+        <p>Current state: {count}</p>
+        {isLoading && <p>Loading.......</p>}
+        {data && <p>{data}</p>}
       </div>
     );
   }
