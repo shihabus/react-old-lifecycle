@@ -1,5 +1,7 @@
 import React, { Component } from "react";
+import * as LifeCycleDebugger from './LifeCylceDebugger'
 import axios from "axios";
+
 class P extends Component {
   constructor(props) {
     super(props);
@@ -38,29 +40,41 @@ export default class Display extends Component {
     this.state = {
       data: 0,
     };
-    console.log("Display constructor");
+    // console.log("Display constructor");
   }
 
   async componentWillMount() {
-    console.log("Display componentWillMount");
+    // console.log("Display componentWillMount");
   }
 
   async componentDidMount() {
-    console.log("Display componentDidMount");
+    // console.log("Display componentDidMount");
   }
 
   componentWillReceiveProps(nextProps) {
-    console.log("Display componentWillReceiveProps nextProps", nextProps);
-    console.log("Display componentWillReceiveProps this.props", this.props);
-    console.log("I doubled prop", this.props);
-    this.setState(() => ({ data: nextProps.text * 2 }));
+    // const table = new LifeCycleDebugger.PreCommit('componentWillReceiveProps', nextProps.text, '--', this.props.text)
+    // // console.log("I doubled prop", this.props);
+    // //  this.setState({ data: nextProps.text * 2 });
+    // console.table(table)
   }
 
-  componentWillUpdate(nextProps, nextState) {
-    console.log("Display componentWillUpdate nextProps", nextProps);
-    console.log("Display componentWillUpdate nextState", nextState);
-    console.log("Display componentWillUpdate this.props", this.props);
-    console.log("Display componentWillUpdate this.state", this.state);
+  // componentWillUpdate(nextProps, nextState) {
+  //   // const table = new LifeCycleDebugger.PreCommit('componentWillUpdate', nextProps.text, nextState.data, this.props.text, this.state.data)
+  //   // //   if (this.props.text !== nextProps.text) {
+  //   // //     this.setState({ data: nextProps.text + 2 });
+  //   // //   }
+  //   // console.table(table)
+  //   console.log('nextState', nextState)
+  //   console.log('this.state', this.state)
+  // }
+
+  static getDerivedStateFromProps(nextProps, prevState) {
+    // const table = {}
+    // table.title = 'getDerivedStateFromProps'
+    // table.nextProps = nextProps.text
+    // table.prevState = prevState.data
+    // console.table(table)
+    console.log('prevState', prevState)
   }
 
   shouldComponentUpdate() {
@@ -69,20 +83,25 @@ export default class Display extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    console.log("Display componentDidUpdate prevProps", prevProps);
-    console.log("Display componentDidUpdate this.props", this.props);
-    console.log("Display componentDidUpdate prevState", prevState);
-    console.log("Display componentDidUpdate this.state", this.state);
-    console.log("I added 2 to prop", this.props);
+    // const table = new LifeCycleDebugger.PostCommit('componentDidUpdate', prevProps.text, prevState.data, this.props.text, this.state.data)
+    //  console.log("I added 2 to prop", this.props);
+    // console.table(table)
+
+    console.log('prevState', prevState)
+    console.log('this.state', this.state)
     if (this.props.text !== prevProps.text) {
-      this.setState((prevState, props) => ({ data: props.text + 2 }));
+      this.setState({ data: this.props.text + 2 });
     }
   }
 
   render() {
-    console.log("Display render");
     const { text } = this.props;
     const { data } = this.state;
+    const table = {}
+    table.LifeCycleMethod = 'Render'
+    table.props = text
+    table.state = data
+    console.table(table)
     return (
       <div>
         <p>Display prop: {text}</p>
